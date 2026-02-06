@@ -13,12 +13,160 @@
 
         body {
             font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd6e8 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Floating hearts and roses */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart, .rose {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.6;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Rose petals falling */
+        .rose-petal {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(ellipse at center, #ff6b9d 0%, #ff1744 100%);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes petal-fall {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Love meter */
+        .love-meter-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .love-meter-container.show {
+            opacity: 1;
+        }
+
+        .love-meter-title {
+            color: #d63384;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .love-meter-bar {
+            width: 150px;
+            height: 20px;
+            background: rgba(255, 107, 157, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .love-meter-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff6b9d 0%, #ff1744 100%);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.8);
+        }
+
+        .love-meter-percentage {
+            color: #d63384;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        /* Animated message overlay */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+
+        .message-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .love-quote {
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            font-style: italic;
+            line-height: 1.6;
+            animation: fadeInScale 1.5s ease-out;
         }
 
         .loading-screen {
@@ -114,12 +262,14 @@
             text-align: center;
             max-width: 600px;
             position: relative;
+            z-index: 10;
         }
 
         .heart-icon {
             font-size: 80px;
             margin-bottom: 20px;
             animation: heartbeat 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5));
         }
 
         @keyframes heartbeat {
@@ -133,6 +283,7 @@
             font-size: 2.5em;
             margin-bottom: 30px;
             font-weight: bold;
+            text-shadow: 0 0 20px rgba(214, 51, 132, 0.3);
         }
 
         .question-container {
@@ -169,11 +320,45 @@
             background: linear-gradient(135deg, #ff6b9d 0%, #ff1744 100%);
             color: white;
             box-shadow: 0 5px 15px rgba(255, 23, 68, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #yesBtn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: sparkle 3s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         #yesBtn:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(255, 23, 68, 0.6);
+        }
+
+        #yesBtn.glow {
+            animation: glow-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { 
+                box-shadow: 0 5px 15px rgba(255, 23, 68, 0.4),
+                           0 0 30px rgba(255, 23, 68, 0.6);
+            }
+            50% { 
+                box-shadow: 0 8px 25px rgba(255, 23, 68, 0.8),
+                           0 0 50px rgba(255, 23, 68, 1);
+            }
         }
 
         #noBtn {
@@ -232,11 +417,26 @@
 
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #ff6b9d;
+            width: 15px;
+            height: 15px;
             position: absolute;
             animation: confetti-fall 3s linear forwards;
+            z-index: 5000;
+        }
+
+        .confetti.heart::before {
+            content: '❤️';
+            font-size: 20px;
+        }
+
+        .confetti.rose::before {
+            content: '🌹';
+            font-size: 20px;
+        }
+
+        .confetti.sparkle::before {
+            content: '✨';
+            font-size: 20px;
         }
 
         @keyframes confetti-fall {
@@ -248,6 +448,30 @@
     </style>
 </head>
 <body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_4d8b61f545.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Hearts and Roses -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- Animated Love Message -->
+    <div class="message-overlay" id="messageOverlay">
+        <div class="love-quote">
+            "In a sea of people, my eyes will always search for you..." 💕
+        </div>
+    </div>
+
+    <!-- Love Meter -->
+    <div class="love-meter-container" id="loveMeter">
+        <div class="love-meter-title">Love Meter 💖</div>
+        <div class="love-meter-bar">
+            <div class="love-meter-fill" id="loveMeterFill"></div>
+        </div>
+        <div class="love-meter-percentage" id="loveMeterPercentage">0%</div>
+    </div>
+
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-content">
@@ -276,25 +500,83 @@
             <div class="celebration" id="celebration">
                 <div class="heart-icon">❤️</div>
                 <h2>Yay! 🎉</h2>
-                <p>Starting this Valentine’s Week with a 'yes' from you is the greatest gift I could ask for. You are the 'Rose' of my life—adding color, fragrance, and beauty to every day. <br>
+                <p>Starting this Valentine's Week with a 'yes' from you is the greatest gift I could ask for. You are the 'Rose' of my life—adding color, fragrance, and beauty to every day. <br>
 
-Happy Rose Day, Charu! I can’t wait to celebrate every day of this week with you. 💖🌹</p>
+Happy Rose Day, Charu! I can't wait to celebrate every day of this week with you. 💖🌹</p>
                 <p style="margin-top: 30px; font-style: italic; color: #d63384;">Happy Valentine's Week, my love! 💝</p>
             </div>
         </div>
     </div>
 
     <script>
+        // Background Music
+        const bgMusic = document.getElementById('bgMusic');
+        
+        // Start music after user interaction (browsers require this)
+        document.addEventListener('click', () => {
+            bgMusic.play().catch(e => console.log('Music autoplay prevented'));
+        }, { once: true });
+
+        // Create floating hearts and roses
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const emojis = ['❤️', '💕', '💖', '🌹', '💝', '💗'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const element = document.createElement('div');
+                    element.className = Math.random() > 0.5 ? 'heart' : 'rose';
+                    element.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    element.style.left = Math.random() * 100 + '%';
+                    element.style.animationDelay = Math.random() * 5 + 's';
+                    element.style.animationDuration = (10 + Math.random() * 10) + 's';
+                    container.appendChild(element);
+                }, i * 1000);
+            }
+            
+            // Keep creating them
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = Math.random() > 0.5 ? 'heart' : 'rose';
+                element.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(element);
+                
+                setTimeout(() => element.remove(), 15000);
+            }, 2000);
+        }
+
+        // Create falling rose petals
+        function createRosePetals() {
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.className = 'rose-petal';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animation = `petal-fall ${3 + Math.random() * 3}s linear forwards`;
+                document.body.appendChild(petal);
+                
+                setTimeout(() => petal.remove(), 6000);
+            }, 300);
+        }
+
+        // Animated message overlay
+        const messageOverlay = document.getElementById('messageOverlay');
+        setTimeout(() => {
+            messageOverlay.classList.add('fade-out');
+        }, 4000);
+
         // Loading Screen Logic
         const loadingScreen = document.getElementById('loadingScreen');
         const progressBar = document.getElementById('progressBar');
         const loadingPercentage = document.getElementById('loadingPercentage');
         const braceMessage = document.getElementById('braceMessage');
         const mainContent = document.getElementById('mainContent');
+        const loveMeter = document.getElementById('loveMeter');
 
         let progress = 0;
-        const loadingDuration = 10000; // 10 seconds
-        const intervalTime = 50; // Update every 50ms
+        const loadingDuration = 10000;
+        const intervalTime = 50;
         const incrementAmount = (100 / (loadingDuration / intervalTime));
 
         const loadingInterval = setInterval(() => {
@@ -304,17 +586,17 @@ Happy Rose Day, Charu! I can’t wait to celebrate every day of this week with y
                 progress = 100;
                 clearInterval(loadingInterval);
                 
-                // Show "Brace Yourself" message
                 progressBar.style.width = '100%';
                 loadingPercentage.textContent = '100%';
                 braceMessage.classList.add('show');
                 
-                // After 1.5 seconds, fade out loading screen and show main content
                 setTimeout(() => {
                     loadingScreen.classList.add('fade-out');
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
                         mainContent.classList.add('show');
+                        createFloatingHearts();
+                        createRosePetals();
                     }, 500);
                 }, 1500);
             } else {
@@ -329,39 +611,48 @@ Happy Rose Day, Charu! I can’t wait to celebrate every day of this week with y
         const questionContainer = document.getElementById('questionContainer');
         const celebration = document.getElementById('celebration');
         const buttonsContainer = document.getElementById('buttonsContainer');
+        const loveMeterFill = document.getElementById('loveMeterFill');
+        const loveMeterPercentage = document.getElementById('loveMeterPercentage');
         
         let yesBtnScale = 1;
         let mouseX = 0;
         let mouseY = 0;
+        let loveLevel = 0;
+
+        // Show love meter after loading
+        setTimeout(() => {
+            loveMeter.classList.add('show');
+        }, 12000);
 
         // Track mouse position
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
             
-            // Get No button position
             const noBtnRect = noBtn.getBoundingClientRect();
             const noBtnCenterX = noBtnRect.left + noBtnRect.width / 2;
             const noBtnCenterY = noBtnRect.top + noBtnRect.height / 2;
             
-            // Calculate distance between cursor and No button
             const deltaX = mouseX - noBtnCenterX;
             const deltaY = mouseY - noBtnCenterY;
             const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             
-            // If cursor is within 150px of the button, make it run away
             const fleeDistance = 150;
             if (distance < fleeDistance) {
-                // Increase Yes button size
+                // Increase Yes button size and make it glow
                 yesBtnScale += 0.1;
                 yesBtn.style.transform = `scale(${yesBtnScale})`;
+                yesBtn.classList.add('glow');
                 
-                // Calculate flee direction (opposite of cursor)
+                // Increase love meter
+                loveLevel = Math.min(100, loveLevel + 2);
+                loveMeterFill.style.width = loveLevel + '%';
+                loveMeterPercentage.textContent = Math.floor(loveLevel) + '%';
+                
                 const angle = Math.atan2(deltaY, deltaX);
                 const fleeX = noBtnCenterX - Math.cos(angle) * 200;
                 const fleeY = noBtnCenterY - Math.sin(angle) * 200;
                 
-                // Keep button within screen bounds with padding
                 const padding = 50;
                 const maxX = window.innerWidth - noBtnRect.width - padding;
                 const maxY = window.innerHeight - noBtnRect.height - padding;
@@ -374,7 +665,6 @@ Happy Rose Day, Charu! I can’t wait to celebrate every day of this week with y
             }
         });
 
-        // Initialize No button position
         function initializeNoBtn() {
             const rect = noBtn.getBoundingClientRect();
             noBtn.style.left = rect.left + 'px';
@@ -383,21 +673,21 @@ Happy Rose Day, Charu! I can’t wait to celebrate every day of this week with y
         
         window.addEventListener('load', initializeNoBtn);
 
-        // Create confetti
+        // Create elaborate confetti with hearts, roses, and sparkles
         function createConfetti() {
-            for (let i = 0; i < 100; i++) {
+            const types = ['heart', 'rose', 'sparkle'];
+            for (let i = 0; i < 150; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
+                    confetti.className = 'confetti ' + types[Math.floor(Math.random() * types.length)];
                     confetti.style.left = Math.random() * 100 + '%';
                     confetti.style.top = '-10px';
-                    confetti.style.background = ['#ff6b9d', '#ff1744', '#ffc1cc', '#ff69b4', '#ff1493'][Math.floor(Math.random() * 5)];
-                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
                     confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
                     document.body.appendChild(confetti);
                     
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 30);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 20);
             }
         }
 
@@ -406,15 +696,20 @@ Happy Rose Day, Charu! I can’t wait to celebrate every day of this week with y
             questionContainer.style.display = 'none';
             celebration.classList.add('active');
             createConfetti();
+            loveMeter.style.display = 'none';
         });
 
-        // Prevent No button click (extra safety)
+        // Prevent No button click
         noBtn.addEventListener('click', (e) => {
             e.preventDefault();
             yesBtnScale += 0.3;
             yesBtn.style.transform = `scale(${yesBtnScale})`;
+            yesBtn.classList.add('glow');
             
-            // Jump to random position far away
+            loveLevel = Math.min(100, loveLevel + 10);
+            loveMeterFill.style.width = loveLevel + '%';
+            loveMeterPercentage.textContent = Math.floor(loveLevel) + '%';
+            
             const newX = Math.random() * (window.innerWidth - 200);
             const newY = Math.random() * (window.innerHeight - 200);
             noBtn.style.left = newX + 'px';
